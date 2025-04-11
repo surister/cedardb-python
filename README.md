@@ -1,0 +1,2 @@
+# CedarDB driver for Python.
+

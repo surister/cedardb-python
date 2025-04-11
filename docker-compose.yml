@@ -1,0 +1,21 @@
+services:
+  cedardb:
+    build:
+      context: .
+      dockerfile: ./build/cedardb.Dockerfile
+    container_name: cedardb
+    env_file:
+      - .env
+    environment:
+      - CEDAR_USER=postgres
+      - CEDAR_PASSWORD=postgres
+      - CEDAR_DB=postgres
+    ports:
+      - "5432:5432"       # Expose CedarDB port
+    volumes:
+      - cedardb_data:/var/lib/cedardb/data
+    restart: unless-stopped
+    user: "999:999"       # Ensure it runs as cedardb user
+
+volumes:
+  cedardb_data:
