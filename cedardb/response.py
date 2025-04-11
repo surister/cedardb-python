@@ -64,7 +64,7 @@ class QueryResponse:
     original_statement_type: str
     columns: list[str] = dataclasses.field(default_factory=list)
     rows: list = dataclasses.field(repr=False, default=list)
-    row_count: int = 0
+    row_count: int = -1
     duration: float = 0
 
     exception: Exception = None
@@ -82,12 +82,20 @@ class QueryResponse:
         )
 
     @classmethod
-    def from_cur(cls, cur):
+    def from_cur(cls, cur, factory = None):
+        if cur.rowcount > 0:
+            if factory:
+                rows = list(map(lambda row: factory(*row), cur.fetchall()))
+            else:
+                rows = cur.fetchall()
+        else:
+            rows = []
+
         return cls(
             original_statement_type=cur.statusmessage.split(" ")[0],
             row_count=cur.rowcount,
             columns=[col.name for col in cur.description] if cur.description else [],
-            rows=cur.fetchall() if cur.rowcount > 0 else [],
+            rows=rows,
         )
 
     def _parse_description(self, description: str):

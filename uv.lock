@@ -31,8 +31,8 @@ wheels = [
 ]
 
 [[package]]
-name = "cedardb-python"
-version = "0.0.1"
+name = "cedardb"
+version = "0.0.0"
 source = { virtual = "." }
 dependencies = [
     { name = "psycopg" },

@@ -1,7 +1,7 @@
 [project]
 name = "cedardb"
 version = "0.0.0"  # version is updated in the Gh workflow.
-description = "Pythonic driver for CedarDB "
+description = "Pythonic driver for CedarDB"
 readme = "README.md"
 authors = [
     {name = 'Ivan', email = 'surister98@gmail.com'}
