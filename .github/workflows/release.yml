@@ -1,6 +1,7 @@
 name: 📦🐍 Build and Release Python client
 on:
-  workflow_call:
+  release:
+    types: [published]
 
 jobs:
   build:
