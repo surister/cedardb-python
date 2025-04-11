@@ -1,3 +1,8 @@
+import psycopg
+
+from cedardb.response import QueryResponse
+
+
 class Client:
     def __init__(
         self, host: str, dbname: str, user: str, password: str, port: str = "5432"
@@ -9,7 +14,7 @@ class Client:
         self.port = port
 
     @property
-    def uri(self):
+    def conn_string(self):
         """Returns a PostgreSQL connection string in key-values.
 
         Examples:
@@ -23,3 +28,20 @@ class Client:
             f" user={self.user}"
             f" password={self.password}"
         )
+
+    def get_conn(self):
+        return psycopg.connect(self.conn_string)
+
+    def query(self, statement: str, raise_exception: bool = False) -> QueryResponse:
+        with self.get_conn() as conn:
+            with conn.cursor() as cur:
+                try:
+                    cur.execute(statement)
+                    response = QueryResponse.from_cur(cur)
+                except psycopg.errors.Error as e:
+                    response = QueryResponse.from_error(e, cur.statusmessage)
+
+                    if raise_exception:
+                        raise e
+
+                return response
