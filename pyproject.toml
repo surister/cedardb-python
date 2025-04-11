@@ -1,7 +1,24 @@
 [project]
 name = "cedardb"
-version = "0.0.1"
-description = "Python driver for CedarDB "
+version = "0.0.0"  # version is updated in the Gh workflow.
+description = "Pythonic driver for CedarDB "
+readme = "README.md"
+authors = [
+    {name = 'Ivan', email = 'surister98@gmail.com'}
+]
+license = { file = "LICENSE.md"}
+keywords = ['cedardb', 'driver', 'connector', 'database', 'psycopg']
+classifiers = [
+    "Topic :: Database",
+    "Topic :: Database :: Front-Ends",
+    "Natural Language :: English",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+]
 requires-python = ">=3.11"
 dependencies = [
     "psycopg>=3.2.6",
@@ -12,3 +29,10 @@ dev = [
     "black>=25.1.0",
     "pytest>=8.3.5",
 ]
+
+[project.urls]
+"Home Page" = "https://github.com/surister/cedardb-python"
+DOCUMENTATION = "https://github.com/surister/cedardb-python"
+Repository = "https://github.com/surister/cedardb-python.git"
+GitHub = "https://github.com/surister/cedardb-python"
+Changelog = "https://github.com/surister/cedardb-python/releases"
