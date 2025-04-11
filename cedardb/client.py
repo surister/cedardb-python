@@ -32,7 +32,9 @@ class Client:
     def get_conn(self):
         return psycopg.connect(self.conn_string)
 
-    def query(self, statement: str, raise_exception: bool = False, factory = None) -> QueryResponse:
+    def query(
+        self, statement: str, raise_exception: bool = False, factory=None
+    ) -> QueryResponse:
         with self.get_conn() as conn:
             with conn.cursor() as cur:
                 try:

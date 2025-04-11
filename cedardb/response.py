@@ -82,7 +82,7 @@ class QueryResponse:
         )
 
     @classmethod
-    def from_cur(cls, cur, factory = None):
+    def from_cur(cls, cur, factory=None):
         if cur.rowcount > 0:
             if factory:
                 rows = list(map(lambda row: factory(*row), cur.fetchall()))
