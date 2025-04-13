@@ -63,7 +63,7 @@ class QueryResponse:
 
     original_statement_type: str
     columns: list[str] = dataclasses.field(default_factory=list)
-    rows: list = dataclasses.field(repr=False, default=list)
+    rows: list = dataclasses.field(repr=False, default_factory=list)
     row_count: int = -1
     duration: float = 0
 
