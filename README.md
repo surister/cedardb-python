@@ -4,9 +4,10 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/:packageName)
 [![📦🐍 Build and Release Python](https://github.com/surister/cedardb-python/actions/workflows/release.yml/badge.svg)](https://github.com/surister/cedardb-python/actions/workflows/release.yml)
 
-This driver is based on psycopg (version 3) and has it's own Pythonic API design.
+A CedarDB driver for Python, based on psycopg3. It follows it's own Pythonic API design.
 
 # Documentation
+
 ## Installation
 
 uv
