@@ -25,12 +25,17 @@ def _create_insert_query(
         'insert into "tbl" values (%s, %s, %s)'
 
     """
+    if not table_name or not row_count:
+        raise AttributeError(
+            "In order to generate an insert query we need the table name and row_count to be"
+            f" valid, but table_name={table_name!r} and row_count={row_count!r} was passed"
+        )
     placeholders = f"{placeholder}," * row_count
-    columns = "(" + ",".join(columns) + ")" if columns else ""
+    columns = " " + "(" + ",".join(columns) + ")" + " " if columns else " "
     if row_count > 0:
         placeholders = placeholders[:-1]
 
-    return f'insert into "{table_name}" {columns} values ({placeholders})'
+    return f'insert into "{table_name}"{columns}values ({placeholders})'
 
 
 class Client:
