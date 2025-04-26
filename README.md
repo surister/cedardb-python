@@ -12,7 +12,7 @@ A CedarDB driver for Python, based on psycopg3. It follows it's own Pythonic API
 
 uv
 ```shell
-uv pip add cedardb
+uv add cedardb
 ```
 pipx
 ```shell
@@ -68,6 +68,31 @@ print(row.as_table())
 # | 2025-04-11 16:32:30.218842 | 1       | Tunna and Onions |
 # +----------------------------+---------+------------------+
 ```
+## Bulk insert using pipelining
+````python
+from cedardb import Client
+
+client = Client(...)
+
+# Create the table to insert the data to
+result = client.query('CREATE TABLE if not exists metrics (ts TIMESTAMP, user_id INTEGER, message TEXT)')
+
+# Generate some random rows
+rows = [
+    (datetime.datetime.now(), i, 'somemsg') for i in range(10)
+]
+
+# Bulk insert
+r = client.insert_many('metrics', rows=rows)
+
+# Check if the insert was successful and print the latest inserted values
+if r.ok:
+    print(
+        client.query('select * from metrics order by ts desc').as_table()
+    )
+````
+
+
 ## Using a factory
 ```python
 import dataclasses

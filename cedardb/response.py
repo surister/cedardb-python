@@ -74,7 +74,9 @@ class QueryResponse:
         return iter(self.rows)
 
     @classmethod
-    def from_error(cls, e: Exception, original_statement_type: str) -> "QueryResponse":
+    def from_error(
+        cls, e: Exception, original_statement_type: str = None
+    ) -> "QueryResponse":
         return cls(
             exception=e,
             error_message=str(e).replace("\n", " "),
@@ -82,8 +84,25 @@ class QueryResponse:
         )
 
     @classmethod
-    def from_cur(cls, cur, factory=None):
-        if cur.rowcount > 0:
+    def from_cur(
+        cls,
+        cur,
+        original_statement_type: str = None,
+        result_expected: bool = True,
+        factory=None,
+    ):
+        """
+        If a result is expected it will try to call `fetchall`.
+
+        Args:
+            cur:
+            result_expected:
+            factory:
+
+        Returns:
+
+        """
+        if result_expected and cur.rowcount > 0:
             if factory:
                 rows = list(map(lambda row: factory(*row), cur.fetchall()))
             else:
@@ -91,15 +110,18 @@ class QueryResponse:
         else:
             rows = []
 
+        if not original_statement_type and cur.statusmessage:
+            original_statement_type = cur.statusmessage.split(" ")[0]
+
         return cls(
-            original_statement_type=cur.statusmessage.split(" ")[0],
+            original_statement_type=original_statement_type,
             row_count=cur.rowcount,
             columns=[col.name for col in cur.description] if cur.description else [],
             rows=rows,
         )
 
     def _parse_description(self, description: str):
-        """Parses psycopg cur.description,"""
+        """Parses psycopg cur.description"""
 
     def as_table(self, max_rows=10) -> str:
         # Error message
