@@ -18,4 +18,4 @@ def test_insert_query():
 
     with pytest.raises(AttributeError):
         _create_insert_query(None, row_count=1)
-        _create_insert_query('some', row_count=None)
+        _create_insert_query("some", row_count=None)
