@@ -36,7 +36,8 @@ def psycopg_mock(request) -> Generator[MagicMock, Any, None]:
     psycopg.connect.cursor.description
 
     It receives a parameter (request.param) to automatically set expected rows and columns.
-     It's best used with the decorator `psycopg_mocked_with`, as it sets a named parameter API that is
+
+    It's best used with the decorator `psycopg_mocked_with`, as it sets a named parameter API that is
     less prone to mistakes, since we will need in the future to further customize the Mock.
 
     Example:
@@ -60,7 +61,8 @@ def psycopg_mock(request) -> Generator[MagicMock, Any, None]:
     +---------+---------+
 
     """
-    rows, columns, error = request.param
+
+    rows, columns, raise_error, side_effect_method, rowcount = request.param
 
     if not rows:
         rows = [list()]
@@ -72,11 +74,13 @@ def psycopg_mock(request) -> Generator[MagicMock, Any, None]:
 
     mock_cursor.fetchall.return_value = rows
 
-    mock_cursor.rowcount = len(rows)
+    mock_cursor.rowcount = rowcount or len(rows)
     mock_cursor.statusmessage = f"mocked"
 
-    if error:
-        mock_cursor.execute.side_effect = error
+    if raise_error:
+        # We set the exception to the appropiate cursor method `side_effect_method`, for example:
+        # cursor.execute or cursor.insertmany
+        getattr(mock_cursor, side_effect_method).side_effect = raise_error
 
     if columns:
         mock_cursor.description = [col_with(name=col) for col in columns]
@@ -96,11 +100,18 @@ def psycopg_mock(request) -> Generator[MagicMock, Any, None]:
 
 
 def psycopg_mocked_with(
-    *, rows: list = None, columns: list = None, raise_error=None
+    *,
+    rows: list = None,
+    columns: list = None,
+    raise_error=None,
+    side_effect_method: str = "execute",
+    rowcount: int = None,
 ) -> typing.Callable:
     def decorator(func):
         return pytest.mark.parametrize(
-            "psycopg_mock", [(rows, columns, raise_error)], indirect=True
+            "psycopg_mock",
+            [(rows, columns, raise_error, side_effect_method, rowcount)],
+            indirect=True,
         )(func)
 
     return decorator
