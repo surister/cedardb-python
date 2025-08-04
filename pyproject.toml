@@ -21,7 +21,7 @@ classifiers = [
 ]
 requires-python = ">=3.11"
 dependencies = [
-    "psycopg>=3.2.6",
+    "psycopg>=3.2.9",
 ]
 
 [dependency-groups]
